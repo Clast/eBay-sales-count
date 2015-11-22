@@ -6,15 +6,25 @@ How to use:
 In order to use this script, you must first create your own client_secrets.json file from Google, which will allow you to make API calls.
 
 1) Go to: https://cloud.google.com/console
+
 2) Create a new project, name and id doesn't matter.
+
 3) Click "API & auth" on the left
+
 4) Enable the gmail API
+
 5) Click Consent screen, enter a product name and save.
+
 6) Click Credentials on the left.
+
 7) Click "Create new Client ID"
+
 8) Application Type: Installed Application>Other
+
 9) Click Create Client ID
+
 10) Download JSON and place this file in the script folder.
+
 
 Set up script:
 
