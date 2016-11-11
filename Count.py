@@ -1,6 +1,5 @@
 # Creates and prints items sold and quantity of each from gmail messages for sold eBay items
 
-#!/usr/bin/python
 
 import httplib2
 import base64
@@ -40,9 +39,9 @@ http = credentials.authorize(http)
 gmail_service = build('gmail', 'v1', http=http)
 
 # Retrieve a page of threads
-#threads = gmail_service.users().threads().list(userId='me').execute()
 
-Unparsed = 'Label_27'
+
+Unparsed = 'Label_27' #Put the label of your "Item Sold" messages here.
 
 
 def ListMessagesWithLabels(service, user_id, label_ids=[]):
@@ -94,21 +93,14 @@ def ReturnMessageBody(service, user_id, msg_id):
       print 'An error occurred: %s' % error
 
 def GetQuantitySold(message):
-	QuantitySold = re.search(r'Quantity sold:\s*\d', message)
-	QuantitySold = QuantitySold.group()
-	QuantitySold = re.search(r'\d',QuantitySold)
+	QuantitySold = re.search('(?<=Quantity Sold: )(\d*)', message)
 	return int(QuantitySold.group())
 
 def GetItemName(message):
-	ItemStart = message.find("Item name:") + 11; 
-    
-	ItemEndCoords = message.find("\r\nhttp:", ItemStart); 
 
-	messageslice = message[ItemStart:ItemEndCoords];
-	messageslice = messageslice.strip();
-	messageslice = messageslice.replace('\r','');
-	messageslice = messageslice.replace('\n','');
-	return messageslice
+    
+    ItemName = re.search('(?<=alt=")(.*)(?=" class="product)',message)
+    return ItemName.group(0)
 
 def PrintDict(dictionary):
 	for item in sorted(dictionary):
@@ -129,6 +121,7 @@ for message in messageList:
     count += 1
      
     message = ReturnMessageBody(gmail_service,'me',messageList[count]['id'])
+
     QuantitySold = GetQuantitySold(message)
 	
     ItemName = GetItemName(message)
@@ -145,4 +138,5 @@ print "Operation Complete"
 	
 print "\n \n \nPrinting out totals"
 PrintDict(sold)
+input('Press ENTER to exit')
 
